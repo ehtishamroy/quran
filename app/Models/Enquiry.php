@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Enquiry extends Model
+{
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'package_id',
+        'message',
+        'status',
+    ];
+
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+}
