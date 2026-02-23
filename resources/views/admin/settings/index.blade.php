@@ -93,6 +93,54 @@
                     </div>
                 </div>
 
+                <!-- Homepage Hero Text -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-[#084D3C] border-b pb-2 mb-4">Homepage Hero Text</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Hero Title</label>
+                            <input type="text" name="home_hero[hero_title]"
+                                value="{{ $settings['home_hero']->where('key', 'home_hero[hero_title]')->first()->value ?? 'Seek Knowledge' }}"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Hero Highlighted Text</label>
+                            <input type="text" name="home_hero[hero_highlight]"
+                                value="{{ $settings['home_hero']->where('key', 'home_hero[hero_highlight]')->first()->value ?? 'From The Cradle' }}"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Hero Subtitle</label>
+                            <input type="text" name="home_hero[hero_subtitle]"
+                                value="{{ $settings['home_hero']->where('key', 'home_hero[hero_subtitle]')->first()->value ?? 'To The Grave' }}"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">Hero Description</label>
+                            <textarea name="home_hero[hero_description]" rows="2"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">{{ $settings['home_hero']->where('key', 'home_hero[hero_description]')->first()->value ?? 'Join thousands of students worldwide learning Quran, Tajweed, and Islamic Studies from certified tutors.' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Us Text -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-[#084D3C] border-b pb-2 mb-4">About Us Section</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">About Us Title Highlight</label>
+                            <input type="text" name="about_us[about_title_highlight]"
+                                value="{{ $settings['about_us']->where('key', 'about_us[about_title_highlight]')->first()->value ?? 'Suffa Islamic Center' }}"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">About Us Description</label>
+                            <textarea name="about_us[about_description]" rows="4"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">{{ $settings['about_us']->where('key', 'about_us[about_description]')->first()->value ?? 'We are dedicated to spreading the light of the Quran and Sunnah. Our mission is to provide accessible, high-quality Islamic education to students of all ages across the globe.' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="flex justify-end">
                     <button type="submit"
                         class="bg-[#DB9E30] text-white px-6 py-3 rounded-lg font-bold hover:bg-yellow-600 transition">

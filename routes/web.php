@@ -14,6 +14,7 @@ use App\Http\Controllers\CoursesController;
 
 Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::get('/courses', [CoursesController::class, 'index'])->name('courses.index');
+Route::get('/courses/{slug}', [CoursesController::class, 'show'])->name('courses.show');
 Route::post('/enquiry', [FrontController::class, 'submitEnquiry'])->name('enquiry.submit');
 Route::get('/blog', [FrontController::class, 'blogIndex'])->name('blog.index');
 Route::get('/blog/{slug}', [FrontController::class, 'blogShow'])->name('blog.show');
@@ -33,4 +34,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('posts', PostController::class);
     Route::resource('enquiries', EnquiryController::class);
     Route::resource('packages', PackageController::class);
+    Route::view('/guide', 'admin.guide')->name('guide');
 });

@@ -166,14 +166,13 @@
                     </div>
 
                     <h1 class="text-5xl md:text-6xl font-serif font-bold leading-tight text-shadow">
-                        Seek Knowledge <br>
-                        <span class="text-secondary">From The Cradle</span> <br>
-                        To The Grave
+                        {{ $getSetting('home_hero[hero_title]') ?? 'Seek Knowledge' }} <br>
+                        <span class="text-secondary">{{ $getSetting('home_hero[hero_highlight]') ?? 'From The Cradle' }}</span> <br>
+                        {{ $getSetting('home_hero[hero_subtitle]') ?? 'To The Grave' }}
                     </h1>
 
                     <p class="text-lg text-gray-200 max-w-lg leading-relaxed">
-                        Join thousands of students worldwide learning Quran, Tajweed, and Islamic Studies from certified
-                        tutors.
+                        {{ $getSetting('home_hero[hero_description]') ?? 'Join thousands of students worldwide learning Quran, Tajweed, and Islamic Studies from certified tutors.' }}
                     </p>
 
                     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 pt-4">
@@ -318,10 +317,10 @@
                 <div>
                     <h4 class="text-secondary font-bold uppercase tracking-widest text-sm mb-2">About Us</h4>
                     <h2 class="text-4xl md:text-5xl font-serif font-bold text-primary mb-6 leading-tight">
-                        Welcome to <br> <span class="text-secondary">Suffa Islamic Center</span>
+                        Welcome to <br> <span class="text-secondary">{{ $getSetting('about_us[about_title_highlight]') ?? 'Suffa Islamic Center' }}</span>
                     </h2>
-                    <p class="text-gray-600 text-lg mb-6 leading-relaxed">
-                        We are dedicated to spreading the light of the Quran and Sunnah. Our mission is to provide accessible, high-quality Islamic education to students of all ages across the globe.
+                    <p class="text-gray-600 text-lg mb-6 leading-relaxed whitespace-pre-line">
+                        {{ $getSetting('about_us[about_description]') ?? 'We are dedicated to spreading the light of the Quran and Sunnah. Our mission is to provide accessible, high-quality Islamic education to students of all ages across the globe.' }}
                     </p>
                     
                     <ul class="space-y-4 mb-8">
@@ -416,9 +415,9 @@
                                     <span class="text-2xl font-bold text-primary">{{ $package->currency }} {{ $package->price }}</span>
                                 </div>
                             </div>
-                            <a href="#contact" onclick="document.getElementById('package_select').value='{{ $package->id }}'" 
+                            <a href="{{ route('courses.show', $package->slug) }}" 
                                class="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-green-900 transition shadow-lg group-hover:shadow-green-900/30">
-                                Maintain Enrollment
+                                View Course Details
                             </a>
                         </div>
                     </div>

@@ -73,8 +73,7 @@
 
                         <!-- Action -->
                         <div class="p-8 pt-0 bg-gray-50">
-                            <a href="{{ route('home') }}#contact"
-                                onclick="sessionStorage.setItem('selected_package', '{{ $package->id }}')"
+                            <a href="{{ route('courses.show', $package->slug) }}"
                                 class="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-green-900 transition shadow-lg group-hover:shadow-green-900/30">
                                 Enroll Now
                             </a>

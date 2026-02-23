@@ -12,7 +12,7 @@ class SettingsController extends Controller
         $settings = \App\Models\Setting::all()->groupBy('group');
 
         // Ensure default groups exist to prevent view errors
-        $groups = ['general', 'contact', 'social'];
+        $groups = ['general', 'contact', 'social', 'home_hero', 'about_us'];
         foreach ($groups as $group) {
             if (!isset($settings[$group])) {
                 $settings[$group] = collect();

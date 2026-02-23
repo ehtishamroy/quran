@@ -104,7 +104,13 @@
                             Settings
                         </a>
                     </li>
-                </ul>
+                    <li class="mt-8 border-t border-green-800 pt-4">
+                        <a href="{{ route('admin.guide') }}"
+                            class="flex items-center px-6 py-3 sidebar-link {{ request()->routeIs('admin.guide') ? 'active-link' : '' }} text-yellow-500 font-bold">
+                            <i class="fas fa-book-open w-5 h-5 mr-3"></i>
+                            How to Use Platform
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
