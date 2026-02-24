@@ -100,7 +100,7 @@
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-3">
-                        @if($logo = $getSetting('site_logo'))
+                        @if($logo = $getSetting('general[site_logo]') ?? $getSetting('site_logo'))
                             <img class="h-14 w-auto" src="{{ asset('storage/' . $logo) }}" alt="Logo">
                         @else
                             <!-- Fallback Logo Icon -->

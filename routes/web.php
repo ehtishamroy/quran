@@ -29,26 +29,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])->name('profile.update');
-    Route::get('settings', [SettingsController::class, 'index'])->name('settings.index');
-    Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::resource('settings', SettingsController::class);
     Route::resource('team-members', TeamMemberController::class);
     Route::resource('posts', PostController::class);
     Route::resource('enquiries', EnquiryController::class);
     Route::resource('packages', PackageController::class);
     Route::view('/guide', 'admin.guide')->name('guide');
 });
-
-// Serve storage files directly natively (Bypasses the need for storage:link on cPanel)
-Route::get('storage/{path}', function ($path) {
-    $fullPath = storage_path("app/public/{$path}");
-
-    if (!file_exists($fullPath)) {
-        abort(404);
-    }
-
-    $mimeType = \Illuminate\Support\Facades\File::mimeType($fullPath);
-
-    return response()->file($fullPath, [
-        'Content-Type' => $mimeType,
-    ]);
-})->where('path', '.*');
