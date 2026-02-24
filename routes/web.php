@@ -37,3 +37,18 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('packages', PackageController::class);
     Route::view('/guide', 'admin.guide')->name('guide');
 });
+
+// Serve storage files directly natively (Bypasses the need for storage:link on cPanel)
+Route::get('storage/{path}', function ($path) {
+    $fullPath = storage_path("app/public/{$path}");
+
+    if (!file_exists($fullPath)) {
+        abort(404);
+    }
+
+    $mimeType = \Illuminate\Support\Facades\File::mimeType($fullPath);
+
+    return response()->file($fullPath, [
+        'Content-Type' => $mimeType,
+    ]);
+})->where('path', '.*');
