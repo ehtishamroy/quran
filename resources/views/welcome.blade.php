@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $getSetting('site_name') ?? 'Suffa Islamic Center' }}</title>
+    @if($favicon = $getSetting('general[site_favicon]'))
+        <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
+    @endif
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
@@ -307,7 +310,11 @@
                 <!-- Image Grid -->
                 <div class="relative">
                     <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-8 border-white">
-                        <img src="https://images.unsplash.com/photo-1609599006353-e629797055af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Islamic Center" class="w-full h-auto">
+                        @if($aboutImg = $getSetting('homepage_images[about_image]'))
+                            <img src="{{ asset('storage/' . $aboutImg) }}" alt="Islamic Center" class="w-full h-auto">
+                        @else
+                            <img src="https://images.unsplash.com/photo-1609599006353-e629797055af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Islamic Center" class="w-full h-auto">
+                        @endif
                     </div>
                     <!-- Decorative Frame -->
                     <div class="absolute top-10 left-10 w-full h-full border-4 border-secondary rounded-2xl -z-0"></div>
@@ -409,12 +416,14 @@
 
                         <!-- Card Footer -->
                         <div class="px-8 pb-8 mt-auto">
-                            <div class="flex items-center justify-between mb-4">
-                                <div>
-                                    <span class="text-xs text-gray-500 block">Monthly Fee</span>
-                                    <span class="text-2xl font-bold text-primary">{{ $package->currency }} {{ $package->price }}</span>
+                            @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <span class="text-xs text-gray-500 block">Monthly Fee</span>
+                                        <span class="text-2xl font-bold text-primary">{{ $package->currency }} {{ $package->price }}</span>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             <a href="{{ route('courses.show', $package->slug) }}" 
                                class="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-green-900 transition shadow-lg group-hover:shadow-green-900/30">
                                 View Course Details
@@ -427,7 +436,11 @@
     </section>
 
     <!-- Counters / Stats Section -->
-    <section class="py-20 bg-primary relative bg-fixed bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1519817650390-64a93db51149?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');">
+    @php
+        $statsBg = $getSetting('homepage_images[stats_bg]');
+        $bgUrl = $statsBg ? asset('storage/' . $statsBg) : "https://images.unsplash.com/photo-1519817650390-64a93db51149?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80";
+    @endphp
+    <section class="py-20 bg-primary relative bg-fixed bg-cover bg-center" style="background-image: url('{{ $bgUrl }}');">
         <div class="absolute inset-0 bg-primary/90"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
@@ -474,7 +487,9 @@
                              <p class="text-gray-600 mb-4 text-sm">{{ $familyPackage->description ?? 'Enroll 3+ Family Members and pay a discounted rate.' }}</p>
                              <div class="flex items-center space-x-4 mb-4">
                                  <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">{{ $familyPackage->days_per_week ?? 5 }} Days/Week</span>
-                                 <span class="text-2xl font-bold text-blue-600">{{ $familyPackage->currency ?? '£' }}{{ $familyPackage->price ?? 100 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                 @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
+                                     <span class="text-2xl font-bold text-blue-600">{{ $familyPackage->currency ?? '£' }}{{ $familyPackage->price ?? 100 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                 @endif
                              </div>
                              <a href="#contact" onclick="document.getElementById('package_select').value='{{ $familyPackage->id ?? '' }}'" class="text-blue-600 font-bold text-sm hover:underline">Enroll Family Now <i class="fas fa-arrow-right ml-1"></i></a>
                          </div>
@@ -493,7 +508,9 @@
                              <p class="text-gray-600 mb-4 text-sm">{{ $bonusPackage->description ?? 'Special discount for grandparents joining with family.' }}</p>
                              <div class="flex items-center space-x-4 mb-4">
                                  <span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold">Limited Offer</span>
-                                 <span class="text-2xl font-bold text-secondary">{{ $bonusPackage->currency ?? '£' }}{{ $bonusPackage->price ?? 40 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                 @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
+                                     <span class="text-2xl font-bold text-secondary">{{ $bonusPackage->currency ?? '£' }}{{ $bonusPackage->price ?? 40 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                 @endif
                              </div>
                              <a href="#contact" onclick="document.getElementById('package_select').value='{{ $bonusPackage->id ?? '' }}'" class="text-secondary font-bold text-sm hover:underline">Claim Discount <i class="fas fa-arrow-right ml-1"></i></a>
                          </div>
@@ -759,7 +776,12 @@
                                 <select name="package_id" id="package_select" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
                                     <option value="">-- Select a Course --</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->id }}">{{ $package->title }} ({{ $package->currency }} {{ $package->price }})</option>
+                                        <option value="{{ $package->id }}">
+                                            {{ $package->title }}
+                                            @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
+                                                ({{ $package->currency }} {{ $package->price }})
+                                            @endif
+                                        </option>
                                     @endforeach
                                     <option value="">Other / General Inquiry</option>
                                 </select>

@@ -7,7 +7,7 @@
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="p-6">
-            <form method="POST" action="{{ route('admin.settings.update', 'all') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -23,10 +23,18 @@
                         </div>
                         <div>
                             <label class="block text-gray-700 font-medium mb-2">Site Logo (Upload)</label>
-                            <input type="file" name="site_logo"
+                            <input type="file" name="general[site_logo]"
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
-                            @if($logo = $settings['general']->where('key', 'site_logo')->first()->value ?? null)
+                            @if($logo = $settings['general']->where('key', 'general[site_logo]')->first()->value ?? null)
                                 <img src="{{ asset('storage/' . $logo) }}" alt="Current Logo" class="h-12 mt-2">
+                            @endif
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-gray-700 font-medium mb-2">Site Favicon (Upload)</label>
+                            <input type="file" name="general[site_favicon]"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                            @if($favicon = $settings['general']->where('key', 'general[site_favicon]')->first()->value ?? null)
+                                <img src="{{ asset('storage/' . $favicon) }}" alt="Current Favicon" class="h-8 mt-2">
                             @endif
                         </div>
                     </div>
@@ -137,6 +145,63 @@
                             <label class="block text-gray-700 font-medium mb-2">About Us Description</label>
                             <textarea name="about_us[about_description]" rows="4"
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">{{ $settings['about_us']->where('key', 'about_us[about_description]')->first()->value ?? 'We are dedicated to spreading the light of the Quran and Sunnah. Our mission is to provide accessible, high-quality Islamic education to students of all ages across the globe.' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Homepage Images -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-[#084D3C] border-b pb-2 mb-4">Homepage Images</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">About Us Section Image</label>
+                            <input type="file" name="homepage_images[about_image]"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                            @if($aboutImg = $settings['homepage_images']->where('key', 'homepage_images[about_image]')->first()->value ?? null)
+                                <img src="{{ asset('storage/' . $aboutImg) }}" alt="About Image" class="h-20 mt-2 rounded">
+                            @endif
+                            <p class="text-sm text-gray-500 mt-1">Leave empty to use the default image.</p>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-2">Stats Banner Background Image</label>
+                            <input type="file" name="homepage_images[stats_bg]"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#084D3C]">
+                            @if($statsBg = $settings['homepage_images']->where('key', 'homepage_images[stats_bg]')->first()->value ?? null)
+                                <img src="{{ asset('storage/' . $statsBg) }}" alt="Stats Background" class="h-20 mt-2 rounded">
+                            @endif
+                            <p class="text-sm text-gray-500 mt-1">Leave empty to use the default image.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Display -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-[#084D3C] border-b pb-2 mb-4">Pricing Display</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="col-span-2">
+                            @php
+                                $showPricing = $settings['general']->where('key', 'general[show_pricing]')->first()->value ?? '1';
+                            @endphp
+                            <label class="flex items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="hidden" name="general[show_pricing]" value="0">
+                                    <input type="checkbox" id="show_pricing" name="general[show_pricing]" value="1" {{ $showPricing === '1' ? 'checked' : '' }} class="sr-only">
+                                    <div class="block bg-gray-200 w-14 h-8 rounded-full transition config-bg"></div>
+                                    <div
+                                        class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition config-transform">
+                                    </div>
+                                </div>
+                                <div class="ml-3 text-gray-700 font-medium">Show Pricing on Homepage</div>
+                            </label>
+                            <style>
+                                input:checked~.config-bg {
+                                    background-color: #084D3C;
+                                }
+
+                                input:checked~.config-transform {
+                                    transform: translateX(100%);
+                                }
+                            </style>
                         </div>
                     </div>
                 </div>
