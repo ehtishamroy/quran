@@ -4,10 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $getSetting('site_name') ?? 'Suffa Islamic Center' }}</title>
+    @php
+        $seoTitle = $getSetting('seo[meta_title]') ?? $getSetting('site_name') ?? 'Suffa Islamic Center';
+        $seoDesc  = $getSetting('seo[meta_description]') ?? 'Join thousands learning Quran, Tajweed & Islamic Studies from certified teachers online.';
+        $seoKeys  = $getSetting('seo[meta_keywords]') ?? 'quran online, learn tajweed, islamic center, hifz program';
+        $ogImage  = $getSetting('seo[og_image]') ? asset('storage/'.$getSetting('seo[og_image]')) : asset('images/og-default.jpg');
+        $primaryColor   = $getSetting('theme[primary_color]') ?? '#084D3C';
+        $secondaryColor = $getSetting('theme[secondary_color]') ?? '#DB9E30';
+    @endphp
+    <title>{{ $seoTitle }}</title>
+    <meta name="description" content="{{ $seoDesc }}">
+    <meta name="keywords" content="{{ $seoKeys }}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="{{ $seoTitle }}">
+    <meta property="og:description" content="{{ $seoDesc }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $seoTitle }}">
+    <meta name="twitter:description" content="{{ $seoDesc }}">
+    <link rel="canonical" href="{{ url('/') }}">
     @if($favicon = $getSetting('general[site_favicon]'))
         <link rel="icon" href="{{ asset('storage/' . $favicon) }}">
     @endif
+    <style>
+        :root {
+            --color-primary: {{ $primaryColor }};
+            --color-secondary: {{ $secondaryColor }};
+        }
+    </style>
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
@@ -17,8 +42,8 @@
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#084D3C',
-                            secondary: '#DB9E30',
+                            primary: '{{ $primaryColor }}',
+                            secondary: '{{ $secondaryColor }}',
                             accent: '#F3F4F6'
                         },
                         fontFamily: {
@@ -56,103 +81,21 @@
 
 <body class="font-sans antialiased text-gray-800 bg-gray-50">
 
-    <!-- Top Bar -->
-    <div class="bg-primary text-white py-2 text-sm border-b border-green-800 hidden md:block">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div class="flex space-x-6">
-                @if($phone = $getSetting('contact_phone'))
-                    <span class="flex items-center hover:text-secondary transition"><i
-                            class="fas fa-phone-alt mr-2 text-secondary"></i> {{ $phone }}</span>
-                @endif
-                @if($email = $getSetting('contact_email'))
-                    <span class="flex items-center hover:text-secondary transition"><i
-                            class="fas fa-envelope mr-2 text-secondary"></i> {{ $email }}</span>
-                @endif
-                <span class="flex items-center"><i class="fas fa-clock mr-2 text-secondary"></i> Mon - Fri: 9:00 -
-                    18:00</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="flex space-x-3 border-r border-green-700 pr-4">
-                    @if($fb = $getSetting('social_facebook')) <a href="{{ $fb }}"
-                    class="hover:text-secondary transition"><i class="fab fa-facebook-f"></i></a> @endif
-                    @if($tw = $getSetting('social_twitter')) <a href="{{ $tw }}"
-                    class="hover:text-secondary transition"><i class="fab fa-twitter"></i></a> @endif
-                    @if($ig = $getSetting('social_instagram')) <a href="{{ $ig }}"
-                    class="hover:text-secondary transition"><i class="fab fa-instagram"></i></a> @endif
-                    @if($yt = $getSetting('social_youtube')) <a href="{{ $yt }}"
-                    class="hover:text-secondary transition"><i class="fab fa-youtube"></i></a> @endif
-                </div>
-                <div>
-                    @auth
-                        <a href="{{ url('/admin/dashboard') }}" class="font-medium hover:text-secondary">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="font-medium hover:text-secondary"><i
-                                class="fas fa-user mr-1"></i> Login</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('partials.navbar')
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center gap-3">
-                        @if($logo = $getSetting('general[site_logo]') ?? $getSetting('site_logo'))
-                            <img class="h-14 w-auto" src="{{ asset('storage/' . $logo) }}" alt="Logo">
-                        @else
-                            <!-- Fallback Logo Icon -->
-                            <div
-                                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white text-xl">
-                                <i class="fas fa-quran"></i>
-                            </div>
-                            <div>
-                                <h1 class="text-2xl font-serif font-bold text-primary leading-none">Suffa</h1>
-                                <span class="text-xs text-secondary font-medium tracking-wider uppercase">Islamic
-                                    Center</span>
-                            </div>
-                        @endif
-                    </a>
-                </div>
-
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-8">
-                    <a href="{{ route('home') }}"
-                        class="text-gray-800 hover:text-primary font-medium text-sm uppercase tracking-wide transition">Home</a>
-                    <a href="#about"
-                        class="text-gray-800 hover:text-primary font-medium text-sm uppercase tracking-wide transition">About</a>
-                    <a href="{{ route('courses.index') }}"
-                        class="text-gray-800 hover:text-primary font-medium text-sm uppercase tracking-wide transition">Courses</a>
-                    <a href="#teachers"
-                        class="text-gray-800 hover:text-primary font-medium text-sm uppercase tracking-wide transition">Teachers</a>
-                    <a href="{{ route('blog.index') }}"
-                        class="text-gray-800 hover:text-primary font-medium text-sm uppercase tracking-wide transition">Blog</a>
-                    <a href="#contact"
-                        class="bg-primary text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-green-800 transition transform hover:-translate-y-0.5">
-                        Contact Us
-                    </a>
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="lg:hidden flex items-center">
-                    <button
-                        class="text-gray-700 hover:text-primary focus:outline-none p-2 border border-gray-200 rounded">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    <!-- Alpine.js -->
-    <script src="//unpkg.com/alpinejs" defer></script>
-    </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative bg-primary overflow-hidden min-h-[600px] flex items-center">
+    @php
+        $heroBgColor = $getSetting('home_hero[hero_bg_color]') ?? $primaryColor;
+        $heroBgImage = $getSetting('home_hero[hero_bg_image]');
+        $heroStyle   = $heroBgImage
+            ? "background-image:url('" . asset('storage/'.$heroBgImage) . "');background-size:cover;background-position:center;"
+            : "background-color:{$heroBgColor};";
+    @endphp
+    <section id="home" class="relative overflow-hidden min-h-[600px] flex items-center" style="{{ $heroStyle }}">
         <!-- Background Pattern/Image -->
-        <div class="absolute inset-0 pattern-overlay opacity-50"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-primary via-primary/90 to-transparent"></div>
+        <div class="absolute inset-0 pattern-overlay opacity-30"></div>
+        <div class="absolute inset-0" style="background:linear-gradient(to right, {{ $heroBgColor }}, {{ $heroBgColor }}cc, transparent)"></div>
 
         <!-- Decoration Geometric Shapes -->
         <div class="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-secondary opacity-10 rounded-full blur-3xl"></div>
@@ -222,15 +165,7 @@
                                     teach it."</p>
                             </div>
 
-                            <!-- Floating Badges -->
-                            <div
-                                class="absolute top-10 left-10 bg-white text-primary p-3 rounded-xl shadow-lg animate-bounce duration-[3000ms]">
-                                <i class="fas fa-star text-secondary"></i> 4.9 Rating
-                            </div>
-                            <div
-                                class="absolute bottom-10 right-10 bg-white text-primary p-3 rounded-xl shadow-lg animate-bounce duration-[4000ms]">
-                                <i class="fas fa-users text-secondary"></i> 5k+ Students
-                            </div>
+                            <!-- Floating Badges Removed -->
                         </div>
                     </div>
                 </div>
@@ -316,8 +251,7 @@
                             <img src="https://images.unsplash.com/photo-1609599006353-e629797055af?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Islamic Center" class="w-full h-auto">
                         @endif
                     </div>
-                    <!-- Decorative Frame -->
-                    <div class="absolute top-10 left-10 w-full h-full border-4 border-secondary rounded-2xl -z-0"></div>
+                    <!-- Decorative Frame Removed -->
                 </div>
 
                 <!-- Text Content -->
@@ -439,27 +373,25 @@
     @php
         $statsBg = $getSetting('homepage_images[stats_bg]');
         $bgUrl = $statsBg ? asset('storage/' . $statsBg) : "https://images.unsplash.com/photo-1519817650390-64a93db51149?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80";
+        $counters = [
+            ['value' => $getSetting('stats[counter_1_value]') ?? '500', 'suffix' => $getSetting('stats[counter_1_suffix]') ?? '+', 'label' => $getSetting('stats[counter_1_label]') ?? 'Students'],
+            ['value' => $getSetting('stats[counter_2_value]') ?? '50',  'suffix' => $getSetting('stats[counter_2_suffix]') ?? '+', 'label' => $getSetting('stats[counter_2_label]') ?? 'Expert Tutors'],
+            ['value' => $getSetting('stats[counter_3_value]') ?? '100', 'suffix' => $getSetting('stats[counter_3_suffix]') ?? '%', 'label' => $getSetting('stats[counter_3_label]') ?? 'Satisfaction Rate'],
+            ['value' => $getSetting('stats[counter_4_value]') ?? '24/7','suffix' => $getSetting('stats[counter_4_suffix]') ?? '',  'label' => $getSetting('stats[counter_4_label]') ?? 'Support'],
+        ];
     @endphp
-    <section class="py-20 bg-primary relative bg-fixed bg-cover bg-center" style="background-image: url('{{ $bgUrl }}');">
+    <section class="py-20 bg-primary relative bg-cover bg-center" style="background-image: url('{{ $bgUrl }}');">
         <div class="absolute inset-0 bg-primary/90"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+                @foreach($counters as $i => $counter)
                 <div>
-                     <div class="text-4xl font-bold mb-2 font-serif text-secondary">500+</div>
-                     <div class="text-green-100 uppercase tracking-wider text-sm">Students</div>
+                    <div class="text-4xl font-bold mb-2 font-serif text-secondary counter-number"
+                         data-target="{{ $counter['value'] }}"
+                         data-suffix="{{ $counter['suffix'] }}">0</div>
+                    <div class="text-green-100 uppercase tracking-wider text-sm">{{ $counter['label'] }}</div>
                 </div>
-                <div>
-                     <div class="text-4xl font-bold mb-2 font-serif text-secondary">50+</div>
-                     <div class="text-green-100 uppercase tracking-wider text-sm">Expert Tutors</div>
-                </div>
-                 <div>
-                     <div class="text-4xl font-bold mb-2 font-serif text-secondary">100%</div>
-                     <div class="text-green-100 uppercase tracking-wider text-sm">Satisfaction</div>
-                </div>
-                 <div>
-                     <div class="text-4xl font-bold mb-2 font-serif text-secondary">24/7</div>
-                     <div class="text-green-100 uppercase tracking-wider text-sm">Support</div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
@@ -488,7 +420,7 @@
                              <div class="flex items-center space-x-4 mb-4">
                                  <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">{{ $familyPackage->days_per_week ?? 5 }} Days/Week</span>
                                  @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
-                                     <span class="text-2xl font-bold text-blue-600">{{ $familyPackage->currency ?? '£' }}{{ $familyPackage->price ?? 100 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                     <span class="text-2xl font-bold text-blue-600">{{ $familyPackage->currency ?? 'Â£' }}{{ $familyPackage->price ?? 100 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
                                  @endif
                              </div>
                              <a href="#contact" onclick="document.getElementById('package_select').value='{{ $familyPackage->id ?? '' }}'" class="text-blue-600 font-bold text-sm hover:underline">Enroll Family Now <i class="fas fa-arrow-right ml-1"></i></a>
@@ -509,7 +441,7 @@
                              <div class="flex items-center space-x-4 mb-4">
                                  <span class="bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold">Limited Offer</span>
                                  @if(($getSetting('general[show_pricing]') ?? '1') !== '0')
-                                     <span class="text-2xl font-bold text-secondary">{{ $bonusPackage->currency ?? '£' }}{{ $bonusPackage->price ?? 40 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
+                                     <span class="text-2xl font-bold text-secondary">{{ $bonusPackage->currency ?? 'Â£' }}{{ $bonusPackage->price ?? 40 }}<span class="text-sm font-normal text-gray-500">/mo</span></span>
                                  @endif
                              </div>
                              <a href="#contact" onclick="document.getElementById('package_select').value='{{ $bonusPackage->id ?? '' }}'" class="text-secondary font-bold text-sm hover:underline">Claim Discount <i class="fas fa-arrow-right ml-1"></i></a>
@@ -728,32 +660,7 @@
 
                 <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl">
                     <h3 class="text-2xl font-bold text-gray-800 mb-6">Book Your Free Trial</h3>
-                    @if(session('success'))
-                        <div x-data="{ open: true }" x-init="setTimeout(() => open = false, 5000)" x-show="open" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-                                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                                <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm w-full sm:p-6">
-                                    <div>
-                                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                                            <i class="fas fa-check text-green-600 text-xl"></i>
-                                        </div>
-                                        <div class="mt-3 text-center sm:mt-5">
-                                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Enquiry Sent!</h3>
-                                            <div class="mt-2">
-                                                <p class="text-sm text-gray-500">{{ session('success') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mt-5 sm:mt-6">
-                                        <button type="button" @click="open = false" class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm">
-                                            OK
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                    <p class="text-gray-500 text-sm mb-4">Fill this form and we'll contact you to schedule your free class.</p>
                     <form action="{{ route('enquiry.submit') }}" method="POST">
                         @csrf
                         <div class="space-y-4">
@@ -932,17 +839,162 @@
             <i class="fab fa-whatsapp text-4xl"></i>
         </a>
     @endif
+    <!-- Session Popup: Free Trial Form -->
+    <div id="enquiry-popup" class="fixed inset-0 z-[999] hidden" aria-modal="true">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative flex items-center justify-center min-h-screen px-4 py-8">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg p-8 animate-fade-in">
+                <button onclick="closePopup()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl leading-none transition">&times;</button>
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-quran text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800">Book Your <span class="text-secondary">Free Trial</span> Class</h3>
+                    <p class="text-gray-500 text-sm mt-1">No credit card required. We'll contact you to schedule!</p>
+                </div>
+                <form id="popup-enquiry-form" action="{{ route('enquiry.submit') }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1 text-sm">Full Name</label>
+                        <input type="text" name="name" required placeholder="Your name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">Email</label>
+                            <input type="email" name="email" required placeholder="email@example.com" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1 text-sm">Phone</label>
+                            <input type="tel" name="phone" required placeholder="+1234567890" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1 text-sm">Interested Course</label>
+                        <select name="package_id" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:outline-none">
+                            <option value="">-- Select a Course --</option>
+                            @foreach($packages as $pkg)
+                                <option value="{{ $pkg->id }}">{{ $pkg->title }}</option>
+                            @endforeach
+                            <option value="">Other / General Inquiry</option>
+                        </select>
+                    </div>
+                    <button type="submit" id="popup-submit-btn" class="w-full bg-secondary text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition shadow-lg uppercase tracking-wide flex items-center justify-center gap-2">
+                        <span id="popup-btn-text">Submit Enquiry</span>
+                        <i id="popup-btn-spinner" class="fas fa-spinner fa-spin hidden"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal (shown after form submission) -->
+    <div id="success-modal" class="fixed inset-0 z-[1000] hidden" aria-modal="true">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="relative flex items-center justify-center min-h-screen px-4">
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-10 text-center">
+                <!-- Animated checkmark -->
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5 relative">
+                    <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <div class="absolute inset-0 rounded-full bg-green-200 animate-ping opacity-30"></div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Enquiry Sent!</h3>
+                <p class="text-gray-500 mb-2">Thank you for reaching out to us.</p>
+                <p class="text-gray-500 text-sm mb-6">Our team will contact you within <strong>24 hours</strong> to schedule your free trial class. Check your email for confirmation.</p>
+                <div class="flex items-center justify-center gap-2 bg-green-50 border border-green-200 rounded-xl py-3 px-4 mb-6">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span class="text-green-700 text-sm font-medium">{{ session('success') ?? 'Your enquiry has been received!' }}</span>
+                </div>
+                <button onclick="closeSuccessModal()" class="w-full bg-primary text-white font-bold py-3 rounded-xl hover:opacity-90 transition shadow-lg">
+                    Close &amp; Continue Browsing
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
-        // Sticky Nav Transition
+        // Sticky Nav
         window.addEventListener('scroll', function () {
             const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.classList.add('shadow-md');
-            } else {
-                nav.classList.remove('shadow-md');
-            }
+            if (window.scrollY > 50) nav.classList.add('shadow-md');
+            else nav.classList.remove('shadow-md');
         });
+
+        // â”€â”€ Popup Logic â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+        function closePopup() {
+            document.getElementById('enquiry-popup').classList.add('hidden');
+            sessionStorage.setItem('popup_shown', '1');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // Mark popup as submitted before the form actually submits
+        // so when the page reloads it won't show again
+        var popupForm = document.getElementById('popup-enquiry-form');
+        if (popupForm) {
+            popupForm.addEventListener('submit', function () {
+                sessionStorage.setItem('popup_shown', '1');
+                // Show loading state
+                document.getElementById('popup-btn-text').textContent = 'Sending...';
+                document.getElementById('popup-btn-spinner').classList.remove('hidden');
+                document.getElementById('popup-submit-btn').disabled = true;
+            });
+        }
+
+        @if(session('success'))
+            // Form was submitted â€” show the success modal, never show the enquiry popup again
+            sessionStorage.setItem('popup_shown', '1');
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('success-modal').classList.remove('hidden');
+            });
+        @else
+            // Show popup once per session after 3 seconds
+            if (!sessionStorage.getItem('popup_shown')) {
+                setTimeout(function() {
+                    document.getElementById('enquiry-popup').classList.remove('hidden');
+                }, 3000);
+            }
+        @endif
+
+        // â”€â”€ Counter Animation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+        function animateCounters() {
+            document.querySelectorAll('.counter-number').forEach(function(el) {
+                var rawTarget = el.getAttribute('data-target');
+                var suffix = el.getAttribute('data-suffix') || '';
+                var num = parseFloat(rawTarget);
+                if (isNaN(num)) {
+                    el.textContent = rawTarget + suffix;
+                    return;
+                }
+                var startTime = null;
+                var duration = 1800;
+                function step(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    var progress = Math.min((timestamp - startTime) / duration, 1);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = Math.floor(eased * num) + suffix;
+                    if (progress < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            });
+        }
+
+        var firstCounter = document.querySelector('.counter-number');
+        if (firstCounter) {
+            var counterObserver = new IntersectionObserver(function(entries) {
+                if (entries[0].isIntersecting) {
+                    animateCounters();
+                    counterObserver.disconnect();
+                }
+            }, { threshold: 0.3 });
+            counterObserver.observe(firstCounter.closest('section'));
+        }
     </script>
 </body>
 

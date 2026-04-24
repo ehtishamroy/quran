@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\TeamMemberController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\CoursesController;
 
@@ -35,5 +37,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('posts', PostController::class);
     Route::resource('enquiries', EnquiryController::class);
     Route::resource('packages', PackageController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('menus', MenuController::class);
+    Route::post('menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
     Route::view('/guide', 'admin.guide')->name('guide');
 });

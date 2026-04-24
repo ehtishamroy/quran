@@ -81,6 +81,26 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.categories.index') }}"
+                            class="flex items-center px-6 py-3 sidebar-link {{ request()->routeIs('admin.categories.*') ? 'active-link' : '' }}">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a2 2 0 012-2z"/>
+                            </svg>
+                            Blog Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.menus.index') }}"
+                            class="flex items-center px-6 py-3 sidebar-link {{ request()->routeIs('admin.menus.*') ? 'active-link' : '' }}">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            Menu Manager
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('admin.packages.index') }}"
                             class="flex items-center px-6 py-3 sidebar-link {{ request()->routeIs('admin.packages.*') ? 'active-link' : '' }}">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
