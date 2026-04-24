@@ -45,14 +45,14 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{{ route('admin.class_timings.edit', $timing->id) }}" class="text-blue-500 hover:text-blue-700 mr-3">
-                                <i class="fas fa-edit"></i>
+                            <a href="{{ route('admin.class_timings.edit', $timing->id) }}" class="text-blue-600 hover:text-blue-800 font-medium mr-4">
+                                <i class="fas fa-edit mr-1"></i> Edit
                             </a>
                             <form action="{{ route('admin.class_timings.destroy', $timing->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this timing?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700">
-                                    <i class="fas fa-trash"></i>
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-medium">
+                                    <i class="fas fa-trash mr-1"></i> Delete
                                 </button>
                             </form>
                         </td>

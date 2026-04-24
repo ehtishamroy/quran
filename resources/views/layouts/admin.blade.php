@@ -10,6 +10,8 @@
     @else
         <script src="https://cdn.tailwindcss.com"></script>
     @endif
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         .sidebar {
             background-color: #084D3C;
