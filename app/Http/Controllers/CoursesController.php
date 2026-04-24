@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Package;
+use App\Models\MenuItem;
+use App\Models\ClassTiming;
 use Illuminate\Http\Request;
 
 class CoursesController extends Controller
@@ -15,6 +17,8 @@ class CoursesController extends Controller
         // Fetch all active packages, prioritizing 'popular' ones if needed
         $packages = Package::all();
         $settings = \App\Models\Setting::all()->groupBy('group');
+        $menuItems = MenuItem::with('children')->whereNull('parent_id')->where('is_active', true)->orderBy('order')->get();
+        $classTimings = ClassTiming::where('is_active', true)->orderBy('order')->get();
 
         // Helper to get setting value
         $getSetting = function ($key) use ($settings) {
@@ -26,13 +30,14 @@ class CoursesController extends Controller
             return null;
         };
 
-        return view('courses.index', compact('packages', 'getSetting'));
+        return view('courses.index', compact('packages', 'getSetting', 'menuItems', 'classTimings'));
     }
 
     public function show($slug)
     {
         $package = Package::where('slug', $slug)->firstOrFail();
         $settings = \App\Models\Setting::all()->groupBy('group');
+        $menuItems = MenuItem::with('children')->whereNull('parent_id')->where('is_active', true)->orderBy('order')->get();
 
         // Helper to get setting value
         $getSetting = function ($key) use ($settings) {
@@ -44,6 +49,6 @@ class CoursesController extends Controller
             return null;
         };
 
-        return view('courses.show', compact('package', 'getSetting'));
+        return view('courses.show', compact('package', 'getSetting', 'menuItems'));
     }
 }

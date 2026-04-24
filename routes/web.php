@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\ClassTimingController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\CoursesController;
 
@@ -40,5 +41,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', CategoryController::class);
     Route::resource('menus', MenuController::class);
     Route::post('menus/reorder', [MenuController::class, 'reorder'])->name('menus.reorder');
+    Route::resource('class_timings', ClassTimingController::class);
+    Route::post('class_timings/reorder', [ClassTimingController::class, 'reorder'])->name('class_timings.reorder');
     Route::view('/guide', 'admin.guide')->name('guide');
 });

@@ -94,35 +94,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                <!-- PK Time -->
+                @foreach($classTimings as $timing)
                 <div class="text-center p-8 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition">
                     <div
                         class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-primary text-2xl">
-                        <i class="far fa-clock"></i>
+                        <i class="{{ $timing->icon }}"></i>
                     </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2">Pakistan Time</h3>
-                    <p class="text-secondary font-bold text-lg">3 PM – 10 PM</p>
+                    <h3 class="font-bold text-xl text-gray-800 mb-2">{{ $timing->title }}</h3>
+                    <p class="text-secondary font-bold text-lg">{{ $timing->time_range }}</p>
                 </div>
-
-                <!-- UK Time -->
-                <div class="text-center p-8 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition">
-                    <div
-                        class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-primary text-2xl">
-                        <i class="far fa-clock"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2">UK Time</h3>
-                    <p class="text-secondary font-bold text-lg">2 PM – 8 PM</p>
-                </div>
-
-                <!-- USA Time -->
-                <div class="text-center p-8 border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition">
-                    <div
-                        class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 text-primary text-2xl">
-                        <i class="far fa-clock"></i>
-                    </div>
-                    <h3 class="font-bold text-xl text-gray-800 mb-2">USA Time</h3>
-                    <p class="text-secondary font-bold text-lg">9 AM – 3 PM</p>
-                </div>
+                @endforeach
             </div>
             <div class="text-center mt-10">
                 <p class="text-sm text-gray-500 italic">* Custom timings are also available upon request.</p>
